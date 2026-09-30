@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300">
+  <defs>
+    <linearGradient id="bgG1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B365D" />
+      <stop offset="100%" stop-color="#D9A441" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="300" fill="url(#bgG1)" opacity="0.15" />
+  <circle cx="150" cy="80" r="140" fill="#1B365D" opacity="0.25" />
+  <circle cx="700" cy="220" r="160" fill="#D9A441" opacity="0.2" />
+  <text x="400" y="150" font-family="system-ui, sans-serif" font-size="38" font-weight="900" fill="#1B365D" text-anchor="middle" opacity="0.3">Las Vegas</text>
+</svg>

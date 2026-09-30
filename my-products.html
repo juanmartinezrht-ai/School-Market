@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Market - Mis Productos en Venta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .my-product-card {
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            transition: var(--transition-smooth);
+            box-shadow: var(--shadow-sm);
+        }
+        .my-product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .my-prod-img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #f1f5f9;
+        }
+        .my-prod-body {
+            padding: 16px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        @media (max-width: 600px) {
+            .my-product-card {
+                flex-direction: column;
+            }
+            .my-prod-img {
+                width: 100%;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR SUPERIOR -->
+    <header>
+        <div class="container navbar">
+            <a href="index.html" class="logo-container">
+                <img src="assets/images/default_logo.png" class="logo-img" alt="Logo Colegio">
+                <span class="logo-text" id="headerSchoolName">School Market</span>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="products.html">Productos</a></li>
+                <li><a href="teacher-products.html">Docentes</a></li>
+                <li><a href="about.html">Nosotros</a></li>
+            </ul>
+
+            <div class="navbar-actions" id="navUserActions">
+                <!-- Dinámico vía assets/js/main.js -->
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="margin-top: 30px; margin-bottom: 60px;">
+        
+        <!-- Header de la Página -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+            <div>
+                <h1 style="font-size: 28px; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-boxes-stacked" style="color: var(--primary-color);"></i> Mis Productos en Venta
+                </h1>
+                <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">
+                    Gestiona y monitorea los productos y stock que tienes publicados en tu colegio
+                </p>
+            </div>
+            <a href="product-details.html?action=new" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; border-radius: 50px; padding: 10px 22px; font-weight: 700; text-decoration: none;">
+                <i class="fa-solid fa-plus-circle"></i> Publicar Nuevo Producto
+            </a>
+        </div>
+
+        <!-- Tarjetas de Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <div>
+                    <div id="statTotalProducts" style="font-size: 24px; font-weight: 800; color: var(--text-dark);">0</div>
+                    <div style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Productos Publicados</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <div>
+                    <div id="statTotalStock" style="font-size: 24px; font-weight: 800; color: var(--text-dark);">0</div>
+                    <div style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Unidades en Inventario</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                </div>
+                <div>
+                    <div id="statTotalSales" style="font-size: 24px; font-weight: 800; color: var(--text-dark);">$0</div>
+                    <div style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Ventas Realizadas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Productos -->
+        <div id="myProductsList" style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="text-align: center; padding: 50px; color: var(--text-muted); font-weight: 600;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                Cargando tus productos...
+            </div>
+        </div>
+    </main>
+
+    <!-- Core Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script>
+        const cop = new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            maximumFractionDigits: 0
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMyProducts();
+        });
+
+        function loadMyProducts() {
+            // Check session
+            fetch('controllers/AuthController.php?action=check-session')
+                .then(r => r.json())
+                .then(res => {
+                    if (res.status !== 'success') {
+                        showToast('Debes iniciar sesión para ver tus productos.', 'error');
+                        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                        return;
+                    }
+                    const user = res.data;
+                    fetchProductsList(user);
+                    fetchTransactions(user);
+                })
+                .catch(err => {
+                    console.error('Error verifying session:', err);
+                });
+        }
+
+        function fetchProductsList(user) {
+            const isTeacher = user.role === 'teacher';
+            const endpoint = isTeacher ? 'controllers/TeacherController.php?action=my-listings' : 'controllers/ProductController.php?action=my-listings';
+
+            fetch(endpoint)
+                .then(r => r.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        renderMyListings(res.data, isTeacher);
+                    } else {
+                        document.getElementById('myProductsList').innerHTML = `
+                            <div class="glass-panel" style="text-align:center; padding: 40px; color: #ef4444;">
+                                ${res.message}
+                            </div>
+                        `;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById('myProductsList').innerHTML = `
+                        <div class="glass-panel" style="text-align:center; padding: 40px; color: #ef4444;">
+                            Error al cargar tus productos.
+                        </div>
+                    `;
+                });
+        }
+
+        function fetchTransactions(user) {
+            fetch('controllers/ProductController.php?action=my-transactions')
+                .then(r => r.json())
+                .then(res => {
+                    if (res.status === 'success' && res.data && res.data.sales) {
+                        const totalSalesAmount = res.data.sales.reduce((acc, s) => acc + parseFloat(s.total_amount || 0), 0);
+                        document.getElementById('statTotalSales').innerText = cop.format(totalSalesAmount);
+                    }
+                })
+                .catch(e => console.log('Transacciones info:', e));
+        }
+
+        function renderMyListings(items, isTeacher) {
+            const container = document.getElementById('myProductsList');
+            const totalCountEl = document.getElementById('statTotalProducts');
+            const totalStockEl = document.getElementById('statTotalStock');
+
+            if (!items || items.length === 0) {
+                totalCountEl.innerText = '0';
+                totalStockEl.innerText = '0';
+                container.innerHTML = `
+                    <div class="glass-panel" style="text-align: center; padding: 60px 20px;">
+                        <div style="font-size: 54px; color: #94a3b8; margin-bottom: 16px;">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <h2 style="font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px;">
+                            Aún no has publicado productos
+                        </h2>
+                        <p style="color: var(--text-muted); font-size: 14px; max-width: 480px; margin: 0 auto 20px;">
+                            Comienza a ofrecer tus postres, manualidades, tutorías o útiles escolares para la comunidad de tu institución.
+                        </p>
+                        <a href="product-details.html?action=new" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; border-radius: 50px; padding: 12px 26px; font-weight: 700; text-decoration: none;">
+                            <i class="fa-solid fa-plus-circle"></i> Publicar mi Primer Producto
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            totalCountEl.innerText = items.length;
+            let sumStock = 0;
+            let html = '';
+
+            items.forEach(item => {
+                const stock = parseInt(item.stock) || 0;
+                sumStock += stock;
+
+                let img = 'assets/images/default_product.png';
+                try {
+                    const parsed = JSON.parse(item.image);
+                    img = Array.isArray(parsed) ? (parsed[0] || img) : item.image;
+                } catch(e) {
+                    img = item.image || img;
+                }
+
+                const detailUrl = `product-details.html?type=${isTeacher ? 'teacher' : 'student'}&id=${item.id}`;
+                const isOutOfStock = stock <= 0 || item.status === 'hidden';
+
+                html += `
+                    <div class="my-product-card">
+                        <img src="${img}" class="my-prod-img" alt="${sanitizeHTML(item.title)}">
+                        <div class="my-prod-body">
+                            <div>
+                                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                                    <span class="badge" style="background: var(--primary-color); color: white; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;">
+                                        ${sanitizeHTML(item.category || item.subject || 'General')}
+                                    </span>
+                                    
+                                    ${isOutOfStock ? `
+                                        <span style="font-size: 12px; font-weight: 700; color: #991b1b; background: #fee2e2; padding: 3px 10px; border-radius: 20px; border: 1px solid #fecaca;">
+                                            <i class="fa-solid fa-circle-xmark"></i> Agotado / Oculto
+                                        </span>
+                                    ` : `
+                                        <span style="font-size: 12px; font-weight: 700; color: #166534; background: #dcfce7; padding: 3px 10px; border-radius: 20px; border: 1px solid #bbf7d0;">
+                                            <i class="fa-solid fa-circle-check"></i> Activo en Catálogo
+                                        </span>
+                                    `}
+                                </div>
+
+                                <h3 style="font-size: 18px; font-weight: 800; color: var(--text-dark); margin-top: 8px; margin-bottom: 4px;">
+                                    <a href="${detailUrl}" style="color: inherit; text-decoration: none;">
+                                        ${sanitizeHTML(item.title)}
+                                    </a>
+                                </h3>
+
+                                <div style="display: flex; align-items: center; gap: 16px; margin-top: 6px; flex-wrap: wrap;">
+                                    <span style="font-size: 18px; font-weight: 800; color: var(--primary-color);">
+                                        ${cop.format(item.price)}
+                                    </span>
+                                    <span style="font-size: 13px; font-weight: 700; color: ${stock > 0 ? '#166534' : '#991b1b'};">
+                                        <i class="fa-solid fa-boxes-stacked"></i> ${stock} unidad(es) disponibles
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 14px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                                <a href="${detailUrl}" class="btn btn-outline" style="border-radius: 50px; font-size: 13px; padding: 6px 14px; text-decoration: none; font-weight: 600;">
+                                    <i class="fa-solid fa-eye"></i> Ver Publicación
+                                </a>
+                                <button onclick="deleteProduct(${item.id}, '${isTeacher ? 'teacher' : 'student'}', '${sanitizeHTML(item.title)}')" class="btn" style="background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 50px; font-size: 13px; font-weight: 600; padding: 6px 14px; cursor: pointer;">
+                                    <i class="fa-regular fa-trash-can"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            totalStockEl.innerText = sumStock;
+            container.innerHTML = html;
+        }
+
+        function deleteProduct(id, type, title) {
+            if (!confirm(`¿Estás seguro de que deseas eliminar la publicación de "${title}"?`)) {
+                return;
+            }
+
+            const endpoint = type === 'teacher' ? 'controllers/TeacherController.php?action=delete' : 'controllers/ProductController.php?action=delete';
+            const body = new FormData();
+            body.append('id', id);
+
+            fetch(endpoint, {
+                method: 'POST',
+                body: body
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    showToast(res.message, 'success');
+                    loadMyProducts();
+                } else {
+                    showToast(res.message, 'error');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast('Error al eliminar el producto.', 'error');
+            });
+        }
+    </script>
+</body>
+</html>

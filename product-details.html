@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Market - Detalle de Producto / Publicar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 768px) {
+            .details-grid { grid-template-columns: 1fr; }
+        }
+        .main-img-box {
+            width: 100%;
+            height: 380px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+        }
+        .main-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .thumbnail-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .thumbnail.active {
+            border-color: var(--primary-color);
+        }
+        .price-tag {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin: 16px 0;
+        }
+        .seller-box {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.open {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: var(--radius-md);
+            max-width: 480px;
+            width: 90%;
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+        }
+    </style>
+</head>
+<body id="productDetailsPage">
+
+    <!-- NAVBAR SUPERIOR -->
+    <header>
+        <div class="container navbar">
+            <a href="index.html" class="logo-container">
+                <img src="assets/images/default_logo.png" class="logo-img" alt="Logo Colegio">
+                <span class="logo-text" id="headerSchoolName">School Market</span>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="products.html">Productos</a></li>
+                <li><a href="teacher-products.html">Docentes</a></li>
+                <li><a href="about.html">Nosotros</a></li>
+            </ul>
+
+            <div class="navbar-actions" id="navUserActions">
+                <!-- Dinámico vía assets/js/main.js -->
+            </div>
+        </div>
+    </header>
+
+    <main class="container" style="margin-top: 30px; margin-bottom: 50px;">
+        
+        <!-- MODO CREACIÓN (SI SE TIENE ACTION=NEW) -->
+        <div id="productCreateBox" style="display:none;">
+            <div class="glass-panel" style="max-width: 650px; margin: 0 auto;">
+                <h2 id="createBoxTitle" style="font-size: 24px; font-weight: 800; margin-bottom: 8px;"><i class="fa-solid fa-plus-circle"></i> Publicar Nuevo Producto</h2>
+                <p id="createBoxSubtitle" style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Completa los datos de tu emprendimiento para venderlo en tu colegio</p>
+
+                <form id="listingUploadForm" enctype="multipart/form-data">
+                    <div style="margin-bottom: 16px;">
+                        <label id="lblTitle" style="display:block; font-weight:600; margin-bottom:6px;">Título del Producto / Servicio</label>
+                        <input type="text" name="title" id="listingTitle" placeholder="Ej. Brownies Artesanales, Tutorías de Mates..." required style="width:100%; height:44px; padding:0 14px; border-radius:6px; border:1px solid #cbd5e1;">
+                    </div>
+
+                    <!-- Campos de Estudiante -->
+                    <div id="studentFormFields" style="margin-bottom: 16px;">
+                        <label style="display:block; font-weight:600; margin-bottom:6px;">Categoría</label>
+                        <select name="category" id="studentCategory" style="width:100%; height:44px; padding:0 14px; border-radius:6px; border:1px solid #cbd5e1; background:white;">
+                            <option value="postres">🍰 Postres & Comida</option>
+                            <option value="tutorias">📚 Tutorías & Clases</option>
+                            <option value="arte">🎨 Arte & Manualidades</option>
+                            <option value="tecnologia">💻 Tecnología & Código</option>
+                            <option value="utiles">✏️ Útiles & Libros</option>
+                        </select>
+                    </div>
+
+                    <!-- Campos de Docente / Profesor -->
+                    <div id="teacherFormFields" style="display:none; grid-template-columns: 1fr 1fr 1fr; gap:14px; margin-bottom: 16px;">
+                        <div>
+                            <label style="display:block; font-weight:600; margin-bottom:6px;">Materia / Asignatura</label>
+                            <input type="text" name="subject" id="teacherSubject" placeholder="Ej. Matemáticas, Física..." style="width:100%; height:44px; padding:0 14px; border-radius:6px; border:1px solid #cbd5e1;">
+                        </div>
+                        <div>
+                            <label style="display:block; font-weight:600; margin-bottom:6px;">Grado Objetivo</label>
+                            <select name="grade" id="teacherGrade" style="width:100%; height:44px; padding:0 14px; border-radius:6px; border:1px solid #cbd5e1; background:white;">
+                                <option value="Todos">Todos los grados</option>
+                                <option value="6°">6° Grado</option>
+                                <option value="7°">7° Grado</option>
+                                <option value="8°">8° Grado</option>
+                                <option value="9°">9° Grado</option>
+                                <option value="10°">10° Grado</option>
+                                <option value="11°">11° Grado</option>
+                                <option value="Pregrado">Pregrado / Universidad</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; font-weight:600; margin-bottom:6px;">Grupo / Nivel</label>
+                            <input type="text" name="group_name" id="teacherGroup" placeholder="Ej. A, B o General" value="General" style="width:100%; height:44px; padding:0 14px; border-radius:6px; border:1px solid #cbd5e1;">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-bottom: 16px;">
+                        <div>
+                            <label style="display:block; font-weight:600; margin-bottom:6px;">Precio (COP)</label>
+                            <input type="number" name="price" placeholder="Ej. 3500 (o 0 si es libre)" min="0" required style="width:100%; height:44px; padding:0 14px; border-radius:6px; border:1px solid #cbd5e1;">
+                        </div>
+                        <div>
+                            <label style="display:block; font-weight:600; margin-bottom:6px;">Unidades (Stock)</label>
+                            <input type="number" name="stock" placeholder="Ej. 10" min="1" value="1" required style="width:100%; height:44px; padding:0 14px; border-radius:6px; border:1px solid #cbd5e1;">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label id="lblDesc" style="display:block; font-weight:600; margin-bottom:6px;">Descripción del Producto</label>
+                        <textarea name="description" id="listingDesc" rows="4" placeholder="Describe ingredientes, horarios, qué incluye..." required style="width:100%; padding:10px 14px; border-radius:6px; border:1px solid #cbd5e1;"></textarea>
+                    </div>
+
+                    <div style="margin-bottom: 24px;">
+                        <label style="display:block; font-weight:600; margin-bottom:6px;">Imágenes del Producto o Material</label>
+                        <input type="file" id="imagesInput" name="images[]" multiple accept="image/*" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px;">
+                    </div>
+
+                    <button type="submit" id="btnSubmitListing" class="btn btn-primary" style="width: 100%; height: 48px; border-radius: 50px; font-weight: 700;">
+                        Publicar Producto Ahora <i class="fa-solid fa-paper-plane" style="margin-left:6px;"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODO VISTA DE DETALLE (POR DEFECTO SI HAY ID EN LA URL) -->
+        <div id="productDetailView" class="glass-panel">
+            <div class="details-grid">
+                <div>
+                    <div class="main-img-box">
+                        <img id="mainImg" src="assets/images/default_product.png" alt="Producto">
+                    </div>
+                    <div id="thumbRow" class="thumbnail-row"></div>
+                </div>
+
+                <div>
+                    <span id="productCategory" class="badge" style="background: var(--primary-color); color: white; padding: 4px 12px; border-radius: 50px; font-size: 12px; font-weight: 700;">Categoría</span>
+                    <span id="productCondition" style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-left: 10px;">ESTADO</span>
+
+                    <h1 id="productTitle" style="font-size: 28px; font-weight: 800; color: var(--text-dark); margin-top: 12px;">Cargando...</h1>
+                    
+                    <div style="display: flex; align-items: center; gap: 14px; margin: 12px 0;">
+                        <div id="productPrice" class="price-tag" style="margin: 0;">$0 COP</div>
+                        <span id="productStockBadge" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #166534; background: #dcfce7; padding: 5px 12px; border-radius: 20px; border: 1px solid #bbf7d0;">
+                            <i class="fa-solid fa-boxes-stacked"></i> <span id="productStockCount">1</span> disponibles
+                        </span>
+                    </div>
+
+                    <p id="productDesc" style="color: #475569; font-size: 15px; margin-bottom: 20px; line-height: 1.6;">Cargando descripción...</p>
+
+                    <!-- Selector de Cantidad -->
+                    <div style="background: #f8fafc; padding: 14px 18px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: 700; font-size: 14px; color: var(--text-dark);"><i class="fa-solid fa-calculator" style="margin-right: 6px; color: var(--primary-color);"></i> Cantidad a ordenar:</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button type="button" id="btnQtyMinus" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #cbd5e1; background: white; font-weight: 800; cursor: pointer;">-</button>
+                            <input type="number" id="detailQuantity" value="1" min="1" max="99" style="width: 50px; height: 34px; text-align: center; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 800; font-size: 15px;">
+                            <button type="button" id="btnQtyPlus" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #cbd5e1; background: white; font-weight: 800; cursor: pointer;">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Caja del Vendedor -->
+                    <div class="seller-box">
+                        <div style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">VENDEDOR REGISTRADO</div>
+                        <h3 id="sellerNameText" style="font-size: 18px; font-weight: 800; color: var(--text-dark); margin-top: 4px;">Nombre Vendedor</h3>
+                        <p id="sellerSchool" style="font-size: 14px; color: var(--text-muted);">Colegio</p>
+                        <p id="sellerClass" style="font-size: 13px; color: var(--primary-color); font-weight: 600; margin-top: 2px;">Grado</p>
+
+                        <div id="reputationBox" style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px;">
+                            <span id="reputationScore" style="font-weight: 800; color: #f59e0b; font-size: 16px;">5.0</span>
+                            <span id="reputationStars" style="color: #f59e0b;">★★★★★</span>
+                            <span id="reputationCount" style="font-size: 13px; color: var(--text-muted);">(0 valoraciones)</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 12px;">
+                        <button id="addToCartBtn" class="btn btn-secondary" style="flex: 1; min-width: 170px; height: 50px; border-radius: 50px; font-size: 15px; font-weight: 700; background: #0284c7; color: white; border: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                        <button id="buyButton" class="btn btn-primary" style="flex: 1; min-width: 170px; height: 50px; border-radius: 50px; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-bolt"></i> Comprar Ahora
+                        </button>
+                        <a id="viewReviewsBtn" href="#" class="btn btn-outline" style="border-radius: 50px; text-decoration: none; padding: 0 18px; display: flex; align-items: center; font-weight: 600;">
+                            <i class="fa-solid fa-star"></i> Ver Opiniones
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DE CHECKOUT -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 12px;"><i class="fa-solid fa-bag-shopping" style="color:var(--primary-color);"></i> Confirmar Compra</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Estás a punto de solicitar el producto a un miembro de tu institución.</p>
+
+            <div style="background: #f8fafc; padding: 16px; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+                <p><strong>Producto:</strong> <span id="modalProductTitle">-</span></p>
+                <p><strong>Vendedor:</strong> <span id="modalSellerName">-</span></p>
+                <p><strong>Cantidad:</strong> <span id="modalQuantity" style="font-weight: 700;">1</span> unidad(es)</p>
+                <p><strong>Precio Unitario:</strong> <span id="modalUnitPrice">-</span></p>
+                <p><strong>Precio Total:</strong> <span id="modalPrice" style="color: var(--primary-color); font-weight: 800; font-size: 16px;">-</span></p>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Comisión de soporte plataforma: <span id="modalCommission">-</span></p>
+                <p style="font-size: 12px; color: var(--text-muted);">El vendedor recibe neto: <span id="modalSellerReceives">-</span></p>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-outline" onclick="closeModal('checkoutModal')" style="flex: 1;">Cancelar</button>
+                <button id="confirmCheckoutBtn" class="btn btn-primary" style="flex: 1;">Confirmar Orden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE RECIBO DE COMPRA -->
+    <div id="receiptModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="font-size: 48px; color: #10b981; margin-bottom: 10px;"><i class="fa-solid fa-circle-check"></i></div>
+            <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">¡Orden Realizada con Éxito!</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Recibo digital de la transacción escolar</p>
+
+            <div style="background: #f8fafc; padding: 16px; border-radius: 8px; text-align: left; font-size: 13px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px;">
+                <p><strong>Transacción:</strong> <span id="receiptTransId">-</span></p>
+                <p><strong>Fecha:</strong> <span id="receiptDate">-</span></p>
+                <p><strong>Producto:</strong> <span id="receiptTitle">-</span></p>
+                <p><strong>Colegio:</strong> <span id="receiptSchool">-</span></p>
+                <p><strong>Vendedor:</strong> <span id="receiptSeller">-</span></p>
+                <p><strong>Comprador:</strong> <span id="receiptBuyer">-</span></p>
+                <hr style="border:0; border-top:1px solid #cbd5e1; margin:4px 0;">
+                <p><strong>Total Transacción:</strong> <span id="receiptTotal" style="font-weight: 800; color: var(--primary-color);">-</span></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="closeModal('receiptModal'); window.location.href='index.html';" style="width: 100%;">Entendido / Ir al Inicio</button>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script src="assets/js/products.js"></script>
+    <script>
+        function adaptFormForRole(role) {
+            const studentFields = document.getElementById('studentFormFields');
+            const teacherFields = document.getElementById('teacherFormFields');
+            const createBoxTitle = document.getElementById('createBoxTitle');
+            const createBoxSubtitle = document.getElementById('createBoxSubtitle');
+            const btnSubmit = document.getElementById('btnSubmitListing');
+            const lblTitle = document.getElementById('lblTitle');
+            const inputTitle = document.getElementById('listingTitle');
+            const lblDesc = document.getElementById('lblDesc');
+            const inputDesc = document.getElementById('listingDesc');
+
+            if (role === 'teacher') {
+                if (studentFields) studentFields.style.display = 'none';
+                if (teacherFields) teacherFields.style.display = 'grid';
+                if (createBoxTitle) createBoxTitle.innerHTML = '<i class="fa-solid fa-graduation-cap" style="color:var(--secondary-color);"></i> Publicar Recurso / Material Docente';
+                if (createBoxSubtitle) createBoxSubtitle.innerText = 'Comparte guías de estudio, talleres, libros y material académico con tus estudiantes';
+                if (lblTitle) lblTitle.innerText = 'Título del Material o Taller';
+                if (inputTitle) inputTitle.placeholder = 'Ej. Taller de Cálculo Diferencial, Guía de Biología...';
+                if (lblDesc) lblDesc.innerText = 'Descripción del Material Académico';
+                if (inputDesc) inputDesc.placeholder = 'Describe qué temas cubre la guía o taller, objetivos y contenido...';
+                if (btnSubmit) btnSubmit.innerHTML = 'Publicar Recurso Docente <i class="fa-solid fa-paper-plane" style="margin-left:6px;"></i>';
+            } else {
+                if (studentFields) studentFields.style.display = 'block';
+                if (teacherFields) teacherFields.style.display = 'none';
+                if (createBoxTitle) createBoxTitle.innerHTML = '<i class="fa-solid fa-plus-circle"></i> Publicar Nuevo Producto';
+                if (createBoxSubtitle) createBoxSubtitle.innerText = 'Completa los datos de tu emprendimiento para venderlo en tu colegio';
+                if (lblTitle) lblTitle.innerText = 'Título del Producto / Servicio';
+                if (inputTitle) inputTitle.placeholder = 'Ej. Brownies Artesanales, Tutorías de Mates...';
+                if (lblDesc) lblDesc.innerText = 'Descripción del Producto';
+                if (inputDesc) inputDesc.placeholder = 'Describe ingredientes, horarios, qué incluye...';
+                if (btnSubmit) btnSubmit.innerHTML = 'Publicar Producto Ahora <i class="fa-solid fa-paper-plane" style="margin-left:6px;"></i>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const action = getQueryParam('action');
+            if (action === 'new') {
+                document.getElementById('productCreateBox').style.display = 'block';
+                document.getElementById('productDetailView').style.display = 'none';
+                document.body.id = 'productCreatePage';
+                setupListingForm();
+
+                if (window.currentUser) {
+                    adaptFormForRole(window.currentUser.role);
+                }
+            } else {
+                document.getElementById('productCreateBox').style.display = 'none';
+                document.getElementById('productDetailView').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

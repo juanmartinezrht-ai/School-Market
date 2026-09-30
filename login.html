@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Market - Portal de Acceso</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body.auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-card-container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px 32px;
+            transition: var(--transition-smooth);
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .auth-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 16px;
+            box-shadow: var(--shadow-sm);
+        }
+        .auth-header h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+        .auth-header p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .input-group input {
+            width: 100%;
+            height: 48px;
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+    </style>
+</head>
+<body class="auth-screen">
+
+    <div class="auth-card-container">
+        <!-- Header estilo Institucional -->
+        <div class="auth-header">
+            <div class="auth-logo" id="schoolLogoBox">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h2 id="loginHeaderTitle">School Market</h2>
+            <p id="schoolNameSubtitle">Accede con tu cuenta registrada</p>
+        </div>
+
+        <!-- Formulario de Inicio de Sesión -->
+        <form id="loginForm" class="auth-form">
+            <input type="hidden" id="loginSchoolId" name="school_id" value="">
+
+            <div class="input-group">
+                <label for="email"><i class="fa-regular fa-user"></i> Correo Institucional o Usuario</label>
+                <input type="text" id="email" name="email" placeholder="correo@colegio.edu.co o admin" required autocomplete="username">
+            </div>
+
+            <div class="input-group">
+                <label for="password"><i class="fa-solid fa-lock"></i> Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; height: 48px; border-radius: var(--radius-sm); font-size:15px; font-weight:700;">
+                Iniciar Sesión <i class="fa-solid fa-arrow-right" style="margin-left:8px;"></i>
+            </button>
+        </form>
+
+        <div style="margin-top: 24px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 20px; font-size: 14px;">
+            <span style="color: var(--text-muted);">¿Aún no tienes cuenta?</span>
+            <a href="register.html" style="color: var(--primary-color); font-weight: 700; text-decoration: none; margin-left: 5px;">Regístrate Aquí</a>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedSchool = localStorage.getItem('selected_school_theme');
+            if (savedSchool) {
+                try {
+                    const school = JSON.parse(savedSchool);
+                    document.getElementById('schoolNameSubtitle').innerText = `Mercado para ${school.school_name}`;
+                    document.getElementById('loginHeaderTitle').innerText = school.school_name;
+                    const sidInput = document.getElementById('loginSchoolId');
+                    if (sidInput) sidInput.value = school.id;
+                } catch (e) {}
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Dependencias
+node_modules/
+vendor/
+
+# Archivos de entorno y logs
+*.log
+.env
+
+# Archivos del sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Subidas temporales si no quieres versionar imágenes de prueba
+# uploads/*
+# !uploads/.gitkeep

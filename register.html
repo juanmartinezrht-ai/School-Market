@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Market - Registro de Estudiante / Docente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body.auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+        .auth-card-container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            width: 100%;
+            max-width: 520px;
+            padding: 36px 32px;
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .auth-logo {
+            width: 54px;
+            height: 54px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 12px;
+            box-shadow: var(--shadow-sm);
+        }
+        .auth-header h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+        .auth-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .input-group {
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            height: 44px;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition-smooth);
+            background: white;
+        }
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body class="auth-screen">
+
+    <div class="auth-card-container">
+        <!-- Header -->
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h2 id="regHeaderTitle">Crear Cuenta Institucional</h2>
+            <p id="regHeaderSubtitle">Regístrate para comprar o vender en tu colegio</p>
+        </div>
+
+        <!-- Formulario de Registro -->
+        <form id="registerForm" class="auth-form">
+            
+            <div class="input-group">
+                <label for="regSchool"><i class="fa-solid fa-school" style="color:var(--primary-color);"></i> Institución Educativa (Medellín)</label>
+                <select id="regSchool" name="school_id" required>
+                    <option value="">Selecciona tu Colegio / Instituto...</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="full_name"><i class="fa-regular fa-user"></i> Nombre y Apellidos</label>
+                <input type="text" id="full_name" name="full_name" placeholder="Ej. Camila Rodríguez" required>
+            </div>
+
+            <div class="input-group">
+                <label for="email"><i class="fa-regular fa-envelope"></i> Correo Institucional</label>
+                <input type="email" id="email" name="email" placeholder="estudiante@colegio.edu.co" required>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="password"><i class="fa-solid fa-lock"></i> Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm_password"><i class="fa-solid fa-lock"></i> Confirmar</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="roleSelect"><i class="fa-solid fa-id-badge"></i> Rol</label>
+                    <select id="roleSelect" name="role">
+                        <option value="student">Estudiante</option>
+                        <option value="teacher">Docente / Profesor</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="phone_number"><i class="fa-brands fa-whatsapp"></i> WhatsApp <span style="font-weight:400;color:var(--text-muted);font-size:11px;">(opcional)</span></label>
+                    <input type="text" id="phone_number" name="phone_number" placeholder="Ej. 3101234567">
+                </div>
+            </div>
+
+            <!-- CAMPOS ESPECÍFICOS DE ESTUDIANTE -->
+            <div id="studentFields">
+                <div class="input-group">
+                    <label for="studentIdInput"><i class="fa-solid fa-id-card"></i> Carné / Código Estudiantil</label>
+                    <input type="text" id="studentIdInput" name="student_id" placeholder="Ej. EST-1024">
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="grade_level"><i class="fa-solid fa-graduation-cap"></i> Grado Escolar / Nivel</label>
+                        <select id="grade_level" name="grade_level" required>
+                            <option value="">Selecciona tu Grado...</option>
+                            <option value="6°">6° (Sexto)</option>
+                            <option value="7°">7° (Séptimo)</option>
+                            <option value="8°">8° (Octavo)</option>
+                            <option value="9°">9° (Noveno)</option>
+                            <option value="10°">10° (Décimo)</option>
+                            <option value="11°">11° (Once / Undécimo)</option>
+                            <option value="Técnico / Tecnológico">Técnico / Tecnológico</option>
+                            <option value="Pregrado">Pregrado (Universidad)</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="group_name"><i class="fa-solid fa-users"></i> Grupo / Sección</label>
+                        <input type="text" id="group_name" name="group_name" placeholder="Ej. 10-A / Semestre 2">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; height: 46px; border-radius: var(--radius-sm); font-size:15px; font-weight:700; margin-top:8px;">
+                Crear Cuenta <i class="fa-solid fa-arrow-right" style="margin-left:6px;"></i>
+            </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 16px; font-size: 14px;">
+            <span style="color: var(--text-muted);">¿Ya tienes una cuenta?</span>
+            <a href="login.html" style="color: var(--primary-color); font-weight: 700; text-decoration: none; margin-left: 5px;">Inicia Sesión</a>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+        let regSchoolsMap = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const schoolSelect = document.getElementById('regSchool');
+            
+            const defaultSchools = [
+                { id: 1, school_name: 'Colegio San José de Las Vegas', address: 'El Poblado', primary_color: '#1e40af', secondary_color: '#3b82f6', logo: 'sanjose.png' },
+                { id: 2, school_name: 'Colegio Montessori', address: 'El Poblado', primary_color: '#15803d', secondary_color: '#22c55e', logo: 'montessori.png' },
+                { id: 3, school_name: 'Colegio UPB', address: 'La Laureles', primary_color: '#b91c1c', secondary_color: '#ef4444', logo: 'upb.png' },
+                { id: 4, school_name: 'Colegio Cumbres', address: 'Envigado / Medellín', primary_color: '#6d28d9', secondary_color: '#a855f7', logo: 'cumbres.png' },
+                { id: 5, school_name: 'Colegio Benedictino', address: 'Envigado', primary_color: '#0369a1', secondary_color: '#0ea5e9', logo: 'benedictino.png' },
+                { id: 6, school_name: 'Colegio Calasanz', address: 'Calasanz', primary_color: '#c2410c', secondary_color: '#f97316', logo: 'calasanz.png' },
+                { id: 7, school_name: 'INEM José Félix de Restrepo', address: 'El Poblado / Guabal', primary_color: '#047857', secondary_color: '#10b981', logo: 'inem.png' },
+                { id: 8, school_name: 'Colegio La Salle', address: 'Envigado / Medellín', primary_color: '#1d4ed8', secondary_color: '#60a5fa', logo: 'lasalle.png' },
+                { id: 9, school_name: 'Colegio Colombo Británico', address: 'El Poblado', primary_color: '#991b1b', secondary_color: '#f87171', logo: 'colombo.png' },
+                { id: 10, school_name: 'Colegio San Ignacio', address: 'Suramericana', primary_color: '#4338ca', secondary_color: '#6366f1', logo: 'sanignacio.png' }
+            ];
+
+            function populateOptions(schools) {
+                schoolSelect.innerHTML = '<option value="">Selecciona tu Institución Educativa...</option>';
+                schools.forEach(school => {
+                    regSchoolsMap[school.id] = school;
+                    const opt = document.createElement('option');
+                    opt.value = school.id;
+                    opt.textContent = `${school.school_name} (${school.address || 'Medellín'})`;
+                    schoolSelect.appendChild(opt);
+                });
+
+                const savedSchool = localStorage.getItem('selected_school_theme');
+                if (savedSchool) {
+                    try {
+                        const s = JSON.parse(savedSchool);
+                        if (s.id && schoolSelect.querySelector(`option[value="${s.id}"]`)) {
+                            schoolSelect.value = s.id;
+                            document.getElementById('regHeaderSubtitle').innerText = `Registro para ${s.school_name}`;
+                        }
+                    } catch (e) {}
+                }
+            }
+
+            populateOptions(defaultSchools);
+
+            fetch('controllers/SchoolController.php?action=list')
+                .then(r => r.json())
+                .then(res => {
+                    if (res.status === 'success' && res.data.length > 0) {
+                        populateOptions(res.data);
+                    }
+                })
+                .catch(e => console.log('Usando colegios locales predeterminados', e));
+
+            schoolSelect.addEventListener('change', (e) => {
+                const selectedId = e.target.value;
+                if (selectedId && regSchoolsMap[selectedId]) {
+                    const school = regSchoolsMap[selectedId];
+                    document.getElementById('regHeaderSubtitle').innerText = `Registro para ${school.school_name}`;
+                    applySchoolTheme(school);
+                    localStorage.setItem('selected_school_theme', JSON.stringify(school));
+                }
+            });
+        });
+    </script>
+</body>
+</html>
